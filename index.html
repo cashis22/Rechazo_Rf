@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Plantilla con IA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .processing-message {
+            text-align: center;
+            font-size: 18px;
+            color: #007BFF;
+            margin-top: 20px;
+        }
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #007BFF;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generador de Plantilla con IA</h1>
+        <form id="templateForm">
+            <label for="name">Nombre del Técnico</label>
+            <input type="text" id="name" placeholder="Ingresa tu nombre" required>
+
+            <label for="client">Nombre del Cliente</label>
+            <input type="text" id="client" placeholder="Ingresa el nombre del cliente" required>
+
+            <label for="issue">Selecciona el Problema</label>
+            <select id="issue" required>
+                <option value="">-- Seleccionar --</option>
+                <option value="Falta de señal">Falta de señal</option>
+                <option value="Problema en el equipo">Problema en el equipo</option>
+                <option value="Instalación incompleta">Instalación incompleta</option>
+            </select>
+
+            <label for="comments">Comentarios Adicionales</label>
+            <textarea id="comments" rows="4" placeholder="Agrega comentarios si es necesario..."></textarea>
+
+            <button type="button" onclick="generateTemplate()">Generar Plantilla</button>
+        </form>
+
+        <div id="processingMessage" class="processing-message" style="display: none;">
+            <div class="loader"></div>
+            <p>Procesando petición y generando plantilla...</p>
+        </div>
+    </div>
+
+    <script>
+        async function generateTemplate() {
+            const name = document.getElementById('name').value;
+            const client = document.getElementById('client').value;
+            const issue = document.getElementById('issue').value;
+            const comments = document.getElementById('comments').value;
+
+            if (!name || !client || !issue) {
+                alert('Por favor, completa todos los campos obligatorios.');
+                return;
+            }
+
+            // Mostrar el mensaje de procesamiento
+            const processingMessage = document.getElementById('processingMessage');
+            processingMessage.style.display = 'block';
+
+            // Generar la plantilla
+            const template = `*Nombre del Técnico:* ${name}\n*Nombre del Cliente:* ${client}\n*Problema:* ${issue}\n${comments ? '*Comentarios:* ' + comments : ''}`;
+
+            // Simular el tiempo de espera para la respuesta de IA
+            const inputText = `Generar una solución para el siguiente caso: \nNombre del Técnico: ${name}\nNombre del Cliente: ${client}\nProblema: ${issue}\nComentarios: ${comments}`;
+
+            // Esperar por la respuesta de la IA
+            const response = await getAIResponse(inputText);
+
+            // Ocultar el mensaje de procesamiento
+            processingMessage.style.display = 'none';
+
+            // Formatear la plantilla final
+            const finalTemplate = `${template}\n*Solución Recomendada:* ${response}`;
+
+            // Copiar la plantilla con la solución recomendada al portapapeles
+            navigator.clipboard.writeText(finalTemplate).then(() => {
+                alert('Plantilla generada y copiada al portapapeles.');
+            });
+        }
+
+        // Función que simula obtener una respuesta de IA
+        async function getAIResponse(inputText) {
+            // Simula un delay de la IA
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    // Aquí podrías integrar la lógica de llamada a una API real
+                    resolve("Revisa las conexiones y reinicia el equipo. Si el problema persiste, verifica el cableado o contacta al soporte técnico.");
+                }, 3000);  // Simula un retraso de 3 segundos
+            });
+        }
+    </script>
+</body>
+</html>
